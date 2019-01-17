@@ -14,7 +14,7 @@ after_success:
   - docker build -t jusoroku/multi-worker ./worker
 
   # Login to the docker CLI
-  - echo "$DOCKER PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those image and push to dockerhub
   - docker push jusoroku/multi-client
   - docker push jusoroku/multi-nginx
