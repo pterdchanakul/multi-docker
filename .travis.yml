@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t oroku/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run oroku/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t jusoroku/multi-client ./client
+  - docker build -t jusoroku/multi-nginx ./nginx
+  - docker build -t jusoroku/multi-server ./server
+  - docker build -t jusoroku/multi-worker ./worker
+
+  # Login to the docker CLI
+  - echo "$DOCKER PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those image and push to dockerhub
+  - docker push jusoroku/multi-client
+  - docker push jusoroku/multi-nginx
+  - docker push jusoroku/multi-server
+  - docker push jusoroku/multi-worker
+
+
+
